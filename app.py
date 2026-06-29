@@ -69,6 +69,9 @@ st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap');
 
+/* ── 全域縮放（等同瀏覽器 85% zoom）── */
+body { zoom: 0.85; }
+
 /* ── 基底 ── */
 html, body,
 [data-testid="stAppViewContainer"],
@@ -912,15 +915,12 @@ st.markdown("""
 # ── API Key 輸入 bar（僅在無 key 時顯示）──────────────────────────
 _has_key = bool(st.session_state.get("gemini_api_key", "").strip())
 if not _has_key:
-    _ka, _kb, _kc = st.columns([2.8, 4, 1], gap="small", vertical_alignment="bottom")
+    _ka, _kb, _kc = st.columns([2.5, 4, 1], gap="small", vertical_alignment="center")
     with _ka:
         st.markdown(
             '<div style="background:#FDF3E0;border:1px solid #E8C87A;border-radius:4px;'
-            'padding:0.45rem 0.9rem;font-size:0.76rem;color:#7A5010;line-height:1.4;'
-            'margin-bottom:0.25rem">'
-            '🔑 請輸入 Gemini API Key 以啟用分析功能'
-            '<br><span style="font-size:0.68rem;color:#A09070">瀏覽現有結果不需要 Key</span>'
-            '</div>',
+            'padding:0.52rem 0.9rem;font-size:0.74rem;color:#7A5010;white-space:nowrap">'
+            '🔑 請輸入 Gemini API Key（瀏覽現有結果不需要 Key）</div>',
             unsafe_allow_html=True,
         )
     with _kb:
@@ -1177,8 +1177,8 @@ _actual_kw = active_config.get("name", active_name) if active_config else active
 
 _kw_via_dropdown = st.session_state.get("_kw_via_dropdown", False)
 
-# 若 dropdown 選取但 session cache 沒資料，從磁碟最新 JSON 補載一次
-if _kw_via_dropdown and _actual_kw and _actual_kw not in st.session_state.brief_cache:
+# 若 session cache 沒有此 keyword 的資料，從磁碟最新 JSON 補載一次
+if _actual_kw and _actual_kw not in st.session_state.brief_cache:
     from librarian import SEARCH_CACHE_DIR
     _safe_kw = _actual_kw.replace("/", "_").replace(" ", "_").replace("\\", "_")[:30]
     _hits = sorted(SEARCH_CACHE_DIR.glob(f"{_safe_kw}_*.json"), reverse=True) if SEARCH_CACHE_DIR.exists() else []
@@ -1197,7 +1197,7 @@ if _kw_via_dropdown and _actual_kw and _actual_kw not in st.session_state.brief_
         except Exception:
             pass
 
-brief_loaded = _actual_kw in st.session_state.brief_cache and _kw_via_dropdown
+brief_loaded = bool(st.session_state.brief_cache.get(_actual_kw, {}).get("recs"))
 
 with c_gen:
     st.markdown("<div style='margin-top:1.75rem'></div>", unsafe_allow_html=True)
@@ -1288,10 +1288,10 @@ if refresh_btn and active_name:
 
 st.markdown("<hr>", unsafe_allow_html=True)
 
-# ── 資料取出（只有從下拉選擇、或剛跑完分析，才載入快取）──────────────
-brief = st.session_state.brief_cache.get(_actual_kw, {}) if _kw_via_dropdown else {}
+# ── 資料取出（有快取就顯示，不限定輸入方式）────────────────────────
+brief = st.session_state.brief_cache.get(_actual_kw, {})
 recs  = brief.get("recs")
-smap  = st.session_state.skeleton_cache.get(_actual_kw) if _kw_via_dropdown else None
+smap  = st.session_state.skeleton_cache.get(_actual_kw)
 
 
 # ═══════════════════════════════════════════════════════════════════
