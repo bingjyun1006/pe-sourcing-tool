@@ -42,7 +42,6 @@ if sys.platform == "win32":
 # ─── 環境設定 ────────────────────────────────────────────────────
 load_dotenv()
 GEMINI_API_KEY    = os.environ.get("GEMINI_API_KEY")
-ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY")
 
 BASE_DIR       = Path(__file__).parent
 VAULT_DIR      = BASE_DIR / "Obsidian_Vault" / "01_Fact_Hunter"
@@ -63,7 +62,6 @@ logging.basicConfig(
 log = logging.getLogger(__name__)
 
 client        = genai.Client(api_key=GEMINI_API_KEY)
-claude_client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
 
 
 def set_gemini_api_key(key: str) -> None:
