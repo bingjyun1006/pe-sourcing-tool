@@ -640,6 +640,7 @@ if "history_loaded"    not in st.session_state: st.session_state.history_loaded 
 if "processed_files"     not in st.session_state: st.session_state.processed_files     = load_processed_files()
 if "uploaded_companies"  not in st.session_state: st.session_state.uploaded_companies  = set()
 if "_co_brief_cache"     not in st.session_state: st.session_state["_co_brief_cache"]  = {}
+if "_clear_confirm"      not in st.session_state: st.session_state["_clear_confirm"]   = False
 
 # ── 公司簡介 Dialog ───────────────────────────────────────────────
 @st.dialog("公司簡介", width="large")
@@ -920,7 +921,7 @@ if not _has_key:
         st.markdown(
             '<div style="background:#FDF3E0;border:1px solid #E8C87A;border-radius:4px;'
             'padding:0.52rem 0.9rem;font-size:0.74rem;color:#7A5010;white-space:nowrap">'
-            '🔑 請輸入 Gemini API Key（瀏覽現有結果不需要 Key）</div>',
+            '🔑 請輸入 Gemini API Key 以啟用分析功能</div>',
             unsafe_allow_html=True,
         )
     with _kb:
@@ -1746,14 +1747,31 @@ if tree_file and tree_file.exists():
         st.markdown('<p class="discovery-title">已發現潛在目標</p>', unsafe_allow_html=True)
     with col_clear:
         st.markdown("<div style='margin-top:1.75rem'></div>", unsafe_allow_html=True)
-        if st.button("🗑 清除", key="clear_tree", help="清除目前賽道的所有已發現公司（需重新上傳 PDF）", use_container_width=True):
-            if tree_file and tree_file.exists():
-                tree_file.unlink()
-            details_file = tree_file.with_name(tree_file.stem + "_details.json") if tree_file else None
-            if details_file and details_file.exists():
-                details_file.unlink()
-            st.toast("已清除發現列表，請重新上傳 PDF", icon="🗑")
-            st.rerun()
+        if not st.session_state.get("_clear_confirm"):
+            if st.button("🗑 清除", key="clear_tree", help="清除目前賽道的所有已發現公司", use_container_width=True):
+                st.session_state["_clear_confirm"] = True
+                st.rerun()
+        else:
+            st.markdown(
+                '<div style="font-size:0.72rem;color:#A04020;font-weight:500;'
+                'margin-bottom:0.3rem">確認清除潛在目標名單？</div>',
+                unsafe_allow_html=True
+            )
+            _cc1, _cc2 = st.columns(2, gap="small")
+            with _cc1:
+                if st.button("確認清除", key="clear_confirm_yes", type="primary", use_container_width=True):
+                    if tree_file and tree_file.exists():
+                        tree_file.unlink()
+                    details_file = tree_file.with_name(tree_file.stem + "_details.json") if tree_file else None
+                    if details_file and details_file.exists():
+                        details_file.unlink()
+                    st.session_state["_clear_confirm"] = False
+                    st.toast("已清除發現列表，請重新上傳 PDF", icon="🗑")
+                    st.rerun()
+            with _cc2:
+                if st.button("取消", key="clear_confirm_no", use_container_width=True):
+                    st.session_state["_clear_confirm"] = False
+                    st.rerun()
     with col_dl:
         st.markdown("<div style='margin-top:1.75rem'></div>", unsafe_allow_html=True)
         # UTF-8-BOM：Excel 直接開中文不亂碼
@@ -1762,7 +1780,7 @@ if tree_file and tree_file.exists():
         import codecs
         wrapper = codecs.getwriter("utf-8")(buf)
         w = csv.writer(wrapper)
-        w.writerow(["公司名", "在做什麼", "上市狀態", "來源軌道", "關係類型", "關係對象"])
+        w.writerow(["公司名", "業務描述", "上市狀態", "來源軌道", "關係類型", "關係對象"])
         for r in rows:
             w.writerow([_clean_name(r[0])] + (r[1:6] if len(r) >= 6 else r[1:]))
         st.download_button(
@@ -1780,7 +1798,7 @@ if tree_file and tree_file.exists():
             import codecs as _codecs
             bm_wrapper = _codecs.getwriter("utf-8")(bm_buf)
             bm_w = csv.writer(bm_wrapper)
-            bm_w.writerow(["公司名", "在做什麼", "上市狀態", "來源軌道", "關係類型", "關係對象"])
+            bm_w.writerow(["公司名", "業務描述", "上市狀態", "來源軌道", "關係類型", "關係對象"])
             for r in bm_rows:
                 bm_w.writerow([_clean_name(r[0])] + (r[1:6] if len(r) >= 6 else r[1:]))
             st.download_button(

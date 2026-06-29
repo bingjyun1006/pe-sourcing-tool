@@ -649,8 +649,17 @@ def generate_company_brief(
 
     except Exception as e:
         log.warning(f"公司簡介查詢失敗（{company_name}）：{type(e).__name__}: {e}")
+        _err_s = str(e)
+        if client is None:
+            _overview = "尚未設定 Gemini API Key，無法查詢公司資訊。請在頁面頂端輸入 API Key 後再試。"
+        elif "429" in _err_s or "RESOURCE_EXHAUSTED" in _err_s:
+            _overview = "API 用量已達上限，請稍後再試。"
+        elif "503" in _err_s or "UNAVAILABLE" in _err_s:
+            _overview = "Gemini 服務暫時無法使用，請稍後再試。"
+        else:
+            _overview = f"查詢失敗（{type(e).__name__}），請確認 API Key 有效後重試。"
         return {
-            "business_overview": "查詢失敗，請稍後重試",
+            "business_overview": _overview,
             "founded_year": "查無資料",
             "company_size": "查無資料",
             "main_products": ["查無資料"],
