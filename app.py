@@ -912,25 +912,27 @@ st.markdown("""
 # ── API Key 輸入 bar（僅在無 key 時顯示）──────────────────────────
 _has_key = bool(st.session_state.get("gemini_api_key", "").strip())
 if not _has_key:
-    st.markdown(
-        '<div style="background:#FDF3E0;border:1px solid #E8C87A;border-radius:4px;'
-        'padding:0.7rem 1rem;margin-bottom:1rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap">'
-        '<span style="font-size:0.78rem;color:#7A5010;white-space:nowrap">'
-        '🔑 請輸入 Gemini API Key 以啟用分析功能（瀏覽現有結果不需要 Key）</span>'
-        '</div>',
-        unsafe_allow_html=True
-    )
-    _k1, _k2 = st.columns([5, 1], gap="small")
-    with _k1:
+    _ka, _kb, _kc = st.columns([2.8, 4, 1], gap="small", vertical_alignment="bottom")
+    with _ka:
+        st.markdown(
+            '<div style="background:#FDF3E0;border:1px solid #E8C87A;border-radius:4px;'
+            'padding:0.45rem 0.9rem;font-size:0.76rem;color:#7A5010;line-height:1.4;'
+            'margin-bottom:0.25rem">'
+            '🔑 請輸入 Gemini API Key 以啟用分析功能'
+            '<br><span style="font-size:0.68rem;color:#A09070">瀏覽現有結果不需要 Key</span>'
+            '</div>',
+            unsafe_allow_html=True,
+        )
+    with _kb:
         _key_input = st.text_input(
             "Gemini API Key",
             type="password",
             placeholder="AIza...",
-            help="前往 https://aistudio.google.com/apikey 取得 Gemini API Key",
+            help="前往 aistudio.google.com/apikey 取得 Gemini API Key",
             label_visibility="collapsed",
             key="api_key_text_input",
         )
-    with _k2:
+    with _kc:
         if st.button("確認", key="api_key_submit", type="primary", use_container_width=True):
             if _key_input.strip():
                 st.session_state["gemini_api_key"] = _key_input.strip()
@@ -1174,6 +1176,27 @@ active_config = _resolve_config(active_name)
 _actual_kw = active_config.get("name", active_name) if active_config else active_name
 
 _kw_via_dropdown = st.session_state.get("_kw_via_dropdown", False)
+
+# 若 dropdown 選取但 session cache 沒資料，從磁碟最新 JSON 補載一次
+if _kw_via_dropdown and _actual_kw and _actual_kw not in st.session_state.brief_cache:
+    from librarian import SEARCH_CACHE_DIR
+    _safe_kw = _actual_kw.replace("/", "_").replace(" ", "_").replace("\\", "_")[:30]
+    _hits = sorted(SEARCH_CACHE_DIR.glob(f"{_safe_kw}_*.json"), reverse=True) if SEARCH_CACHE_DIR.exists() else []
+    if _hits:
+        try:
+            _d = json.loads(_hits[0].read_text(encoding="utf-8"))
+            _recs_d = _d.get("recommendations")
+            _smap_d = _d.get("skeleton_map")
+            if _recs_d:
+                st.session_state.brief_cache[_actual_kw] = {
+                    "recs":   BriefRecommendations(**_recs_d),
+                    "track3": _d.get("track3", {}),
+                }
+            if _smap_d:
+                st.session_state.skeleton_cache[_actual_kw] = SkeletonMap(**_smap_d)
+        except Exception:
+            pass
+
 brief_loaded = _actual_kw in st.session_state.brief_cache and _kw_via_dropdown
 
 with c_gen:
