@@ -61,8 +61,9 @@ logging.basicConfig(
 )
 log = logging.getLogger(__name__)
 
-# 有 env key 就直接初始化；沒有則等使用者在 UI 輸入後呼叫 set_gemini_api_key
-client = genai.Client(api_key=GEMINI_API_KEY) if GEMINI_API_KEY else None
+# client 不在模組載入時初始化，避免無 API key 時報錯
+# 有 env key 時由 app.py 啟動時呼叫 set_gemini_api_key 建立；無 key 由使用者輸入後呼叫
+client = None
 
 
 def set_gemini_api_key(key: str) -> None:
