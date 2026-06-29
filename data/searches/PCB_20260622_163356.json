@@ -1,0 +1,122 @@
+{
+  "keyword": "PCB",
+  "timestamp": "2026-06-22T16:33:56.853655",
+  "skeleton_map": {
+    "total_layers": 5,
+    "layers": [
+      {
+        "level": 1,
+        "name": "終端產品品牌/ODM",
+        "description": "PCB的最終應用市場，主要為AI伺服器、資料中心、車用電子及高階消費電子產品的品牌商或ODM廠。",
+        "known_companies": [
+          "廣達",
+          "鴻海",
+          "特斯拉",
+          "輝達"
+        ],
+        "out_of_scope": false
+      },
+      {
+        "level": 2,
+        "name": "PCB製造商",
+        "description": "根據客戶設計圖，生產各類印刷電路板的專業製造商。",
+        "known_companies": [
+          "欣興",
+          "臻鼎-KY",
+          "華通",
+          "健鼎"
+        ],
+        "out_of_scope": false
+      },
+      {
+        "level": 3,
+        "name": "CCL/PP製造商",
+        "description": "提供PCB製造所需的銅箔基板 (CCL) 和黏合片 (PP) 等核心材料。",
+        "known_companies": [
+          "台光電",
+          "聯茂",
+          "台燿",
+          "南亞"
+        ],
+        "out_of_scope": false
+      },
+      {
+        "level": 4,
+        "name": "電子級玻纖布/玻纖紗製造商",
+        "description": "生產CCL所需的電子級玻璃纖維布和玻璃纖維紗。",
+        "known_companies": [
+          "富喬",
+          "建榮",
+          "德宏"
+        ],
+        "out_of_scope": false
+      },
+      {
+        "level": 5,
+        "name": "銅箔製造商",
+        "description": "提供CCL所需的電解銅箔。",
+        "known_companies": [
+          "金居"
+        ],
+        "out_of_scope": false
+      }
+    ]
+  },
+  "recommendations": {
+    "track1": [
+      {
+        "company_name": "柏承",
+        "ticker": "6141",
+        "reason": "中小型PCB製造商，年報主要進貨廠商可能揭露其未上市材料或設備供應商。"
+      },
+      {
+        "company_name": "泰詠",
+        "ticker": "6266",
+        "reason": "中小型PCB製造商，年報主要進貨廠商可能揭露其未上市材料或設備供應商。"
+      },
+      {
+        "company_name": "志超",
+        "ticker": "8213",
+        "reason": "中型PCB製造商，年報主要進貨廠商可能揭露其未上市材料或設備供應商。"
+      },
+      {
+        "company_name": "燿華",
+        "ticker": "2367",
+        "reason": "中型PCB製造商，年報主要進貨廠商可能揭露其未上市材料或設備供應商。"
+      },
+      {
+        "company_name": "楠梓電",
+        "ticker": "2316",
+        "reason": "中型PCB製造商，年報主要進貨廠商可能揭露其未上市材料或設備供應商。"
+      }
+    ],
+    "track2": [
+      {
+        "company_name": "欣興",
+        "ticker": "3037",
+        "reason": "大型PCB製造商，可能透過策略投資持有未上市供應鏈相關子公司。"
+      },
+      {
+        "company_name": "臻鼎-KY",
+        "ticker": "4958",
+        "reason": "大型PCB製造商，可能透過策略投資持有未上市供應鏈相關子公司。"
+      },
+      {
+        "company_name": "華通",
+        "ticker": "2313",
+        "reason": "大型PCB製造商，可能透過策略投資持有未上市供應鏈相關子公司。"
+      },
+      {
+        "company_name": "台光電",
+        "ticker": "2383",
+        "reason": "大型CCL製造商，可能透過策略投資持有未上市材料或設備相關子公司。"
+      },
+      {
+        "company_name": "聯茂",
+        "ticker": "6213",
+        "reason": "大型CCL製造商，可能透過策略投資持有未上市材料或設備相關子公司。"
+      }
+    ]
+  },
+  "track3": {}
+}

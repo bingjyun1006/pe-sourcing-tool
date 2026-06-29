@@ -1,0 +1,13 @@
+streamlit
+google-genai
+anthropic
+python-dotenv
+pydantic
+pyyaml
+requests
+beautifulsoup4
+pdfplumber
+PyMuPDF
+pandas
+watchdog
+urllib3

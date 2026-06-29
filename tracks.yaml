@@ -1,0 +1,54 @@
+tracks:
+  semiconductor_packaging:
+    name: 半導體先進封裝
+    file_keywords:
+    - 先進封裝
+    - CoWoS
+    - 封裝
+    - 探針卡
+    search_keywords:
+    - CoWoS
+    - 先進封裝
+    - 探針卡
+    - ALD設備
+    - 化合物半導體
+    - 晶圓級封裝
+    tree_file: 先進封裝賽道.md
+  passive_components:
+    name: 被動元件
+    file_keywords:
+    - 被動元件
+    - MLCC
+    - 電容
+    - 電阻
+    - 電感
+    - 被動
+    search_keywords:
+    - MLCC
+    - 鈦酸鋇
+    - 介電材料
+    - 被動元件
+    - 電阻
+    - 電容
+    tree_file: 被動元件賽道.md
+  track_2:
+    name: 散熱模組
+    file_keywords:
+    - 散熱模組
+    search_keywords:
+    - 散熱模組
+    tree_file: 散熱模組賽道.md
+  PCB:
+    name: PCB
+    file_keywords:
+    - PCB
+    search_keywords:
+    - PCB
+    tree_file: PCB賽道.md
+  track_4:
+    name: 聯華電子
+    file_keywords:
+    - 聯華電子
+    search_keywords:
+    - 聯華電子
+    tree_file: 聯華電子賽道.md

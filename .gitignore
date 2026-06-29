@@ -1,0 +1,57 @@
+# API Keys & 環境設定
+.env
+*.env
+secrets.toml
+
+# 原始 PDF（大檔 + 機密來源文件）
+data/pdfs/
+Obsidian_Vault/01_Fact_Hunter/raw_inputs/
+
+# Claude Code 本機設定（不屬於專案）
+.claude/
+
+# Claude Code 專案指令（含個人資訊，不對外公開）
+CLAUDE.md
+
+# Debug / 測試暫存檔
+data/debug_*
+data/dryrun*.json
+data/batch_result.json
+data/scan_hesb*.json
+data/scan_result.json
+data/scan_t2_extra.json
+data/jiabang_*
+data/sbir_debug.html
+data/procurement_cache.json
+data/sbir_cache.json
+data/test_*.json
+data/token_est.json
+test_*.py
+gemini_result.txt
+gemini_track2_result.txt
+tmp_check.txt
+
+# 規格文件與暫存（本機參考用）
+*.html
+*.docx
+notes/HANDOFF.md
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+
+# 系統檔
+.DS_Store
+Thumbs.db
+
+# 處理紀錄（本機才需要，各 track 各自的）
+data/processed_files*.json
+data/file_source_types*.json
+processed_files.json
+
+# Log
+processing.log

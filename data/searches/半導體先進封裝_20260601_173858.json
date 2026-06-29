@@ -1,0 +1,97 @@
+{
+  "keyword": "半導體先進封裝",
+  "timestamp": "2026-06-01T17:38:58.142430",
+  "skeleton_map": {
+    "total_layers": 4,
+    "layers": [
+      {
+        "level": 1,
+        "name": "終端應用與系統整合商",
+        "description": "驅動對高效能、高密度半導體產品需求的終端品牌與系統設計公司。",
+        "known_companies": [
+          "輝達",
+          "超微",
+          "蘋果",
+          "谷歌",
+          "高通",
+          "聯發科"
+        ],
+        "out_of_scope": false
+      },
+      {
+        "level": 2,
+        "name": "晶圓代工與專業封裝服務",
+        "description": "提供晶圓製造、後段整合與先進封裝技術服務的核心廠商。",
+        "known_companies": [
+          "台積電",
+          "三星電子",
+          "英特爾",
+          "日月光投控",
+          "艾克爾科技"
+        ],
+        "out_of_scope": false
+      },
+      {
+        "level": 3,
+        "name": "關鍵材料、設備與次系統供應商",
+        "description": "提供先進封裝所需的特殊基板、化學材料、精密設備及相關次系統的專業供應商。",
+        "known_companies": [],
+        "out_of_scope": false
+      },
+      {
+        "level": 4,
+        "name": "超出公開資料範圍",
+        "description": "涉及更上游的基礎化學品、金屬原料、精密機械零件等，資訊通常不公開或高度分散。",
+        "known_companies": [],
+        "out_of_scope": true
+      }
+    ]
+  },
+  "recommendations": {
+    "track1": [
+      {
+        "company_name": "聯發科",
+        "ticker": "2454",
+        "reason": "大型無晶圓廠IC設計公司，其高階晶片大量仰賴先進封裝服務，年報可能揭露主要封裝供應商。"
+      },
+      {
+        "company_name": "群聯",
+        "ticker": "8299",
+        "reason": "記憶體控制晶片領導廠商，對先進封裝技術如堆疊封裝需求高，年報可能揭露關鍵封裝供應商。"
+      },
+      {
+        "company_name": "南亞科",
+        "ticker": "2408",
+        "reason": "DRAM IDM廠，自行或委外進行先進DRAM封裝，年報可能揭露相關材料或設備供應商。"
+      },
+      {
+        "company_name": "力成",
+        "ticker": "6239",
+        "reason": "大型記憶體封測廠，大量採購先進封裝所需材料及設備，年報可能揭露重要供應商。"
+      },
+      {
+        "company_name": "頎邦",
+        "ticker": "6147",
+        "reason": "驅動IC專業封測廠，其FOG/COF/COG等先進封裝技術採購需求集中，年報可能揭露關鍵材料或設備供應商。"
+      }
+    ],
+    "track2": [
+      {
+        "company_name": "日月光投控",
+        "ticker": "3711",
+        "reason": "作為全球最大封測代工廠，其策略性投資部門積極布局先進封裝相關材料、設備及新創公司。"
+      },
+      {
+        "company_name": "聯電",
+        "ticker": "2303",
+        "reason": "聯電集團透過其創投臂膀，長期且策略性投資半導體供應鏈，包含先進封裝相關技術與公司。"
+      },
+      {
+        "company_name": "聯發科",
+        "ticker": "2454",
+        "reason": "領先的IC設計公司，為確保晶片產品的先進製程與封裝能力，可能策略性投資相關技術或新創公司。"
+      }
+    ]
+  },
+  "track3": {}
+}
