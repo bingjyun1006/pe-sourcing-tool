@@ -927,7 +927,7 @@ if not _has_key:
     with _kb:
         _key_input = st.text_input(
             "Gemini API Key",
-            type="password",
+            type="default",
             placeholder="AIza...",
             help="前往 aistudio.google.com/apikey 取得 Gemini API Key",
             label_visibility="collapsed",
