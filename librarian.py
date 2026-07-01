@@ -275,6 +275,7 @@ def save_company_brief(company_name: str, data: dict) -> None:
     safe = re.sub(r'[\\/:*?"<>|]', "_", company_name)[:60]
     p = BRIEFS_DIR / f"{safe}.json"
     p.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+    _sync_to_github_async(f"auto: save company brief [{company_name}]")
 
 
 _CHINA_CITIES = (
@@ -411,6 +412,39 @@ def validate_companies_in_twse(companies: list[str]) -> tuple[list[str], list[st
         log.warning(f"TWSE 驗證失敗：{e}")
         return companies, []
 
+def _sync_to_github(message: str = "auto: sync data from Render") -> None:
+    """背景將資料變更 push 回 GitHub（需設定 GITHUB_TOKEN 環境變數）"""
+    import subprocess
+    token = os.environ.get("GITHUB_TOKEN", "").strip()
+    if not token:
+        return
+    repo = os.environ.get("GITHUB_REPO", "bingjyun1006/pe-sourcing-tool")
+    remote = f"https://x-token:{token}@github.com/{repo}.git"
+    cwd = str(BASE_DIR)
+    try:
+        subprocess.run(["git", "config", "user.email", "render-sync@pe-sourcing.local"], cwd=cwd, check=True, capture_output=True)
+        subprocess.run(["git", "config", "user.name", "Render Sync Bot"], cwd=cwd, check=True, capture_output=True)
+        subprocess.run(["git", "add",
+                        "data/searches", "data/company_briefs", "data/saved_tracks.json",
+                        "data/bookmarks_*",
+                        "Obsidian_Vault/01_Fact_Hunter/track_trees"],
+                       cwd=cwd, capture_output=True)
+        diff = subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=cwd)
+        if diff.returncode == 0:
+            return  # 沒有變更，不需 push
+        subprocess.run(["git", "commit", "-m", message], cwd=cwd, check=True, capture_output=True)
+        subprocess.run(["git", "pull", "--rebase", remote, "master"], cwd=cwd, check=True, capture_output=True)
+        subprocess.run(["git", "push", remote, "master"], cwd=cwd, check=True, capture_output=True)
+        log.info("GitHub sync 完成")
+    except Exception as e:
+        log.warning(f"GitHub sync 失敗（不影響主功能）：{e}")
+
+
+def _sync_to_github_async(message: str = "auto: sync data from Render") -> None:
+    """非阻塞版本，不影響 UI 回應速度"""
+    threading.Thread(target=_sync_to_github, args=(message,), daemon=True).start()
+
+
 def save_search_result(keyword: str, skeleton_map, recommendations, track3: dict) -> Path:
     """將搜尋結果存成 JSON，供下次啟動時讀回（不用重跑 Gemini）"""
     SEARCH_CACHE_DIR.mkdir(parents=True, exist_ok=True)
@@ -427,6 +461,7 @@ def save_search_result(keyword: str, skeleton_map, recommendations, track3: dict
     with open(path, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
     log.info(f"搜尋結果已存：{path.name}")
+    _sync_to_github_async(f"auto: save search result [{keyword}]")
     return path
 
 def save_track(keyword: str, search_filename: str = "") -> List[dict]:
@@ -446,7 +481,7 @@ def save_track(keyword: str, search_filename: str = "") -> List[dict]:
 
     # 同步寫入 tracks.yaml（若此關鍵字尚未定義）
     _sync_keyword_to_tracks_yaml(keyword)
-
+    _sync_to_github_async(f"auto: save track [{keyword}]")
     return tracks
 
 
@@ -1819,6 +1854,8 @@ def process_file(
 
     log.info(f"發現 {len(payload.discovered_entities)} 家公司（過濾前）← {file_path.name}")
     written = append_to_track_tree(payload, tracks, source_type=source_type, source_pdf=file_path.name)
+    if written:
+        _sync_to_github_async(f"auto: PDF analysis [{file_path.name}] → {written} entries")
     return payload.source_company, written
 
 def manual_add_to_tree(
@@ -1875,6 +1912,7 @@ def manual_add_to_tree(
     })
     details_file.write_text(json.dumps(existing, ensure_ascii=False, indent=2), encoding="utf-8")
     log.info(f"手動新增：{entity_name.strip()} → {tree_file.name}")
+    _sync_to_github_async(f"auto: manual add [{entity_name.strip()}]")
     return True
 
 
